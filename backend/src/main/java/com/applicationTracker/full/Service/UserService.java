@@ -6,6 +6,7 @@ import com.applicationTracker.full.Exception.ResourceNotFoundException;
 import com.applicationTracker.full.Models.Users;
 import com.applicationTracker.full.Repository.UserRepository;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UsersDTO getDTO(Users user){
@@ -47,7 +50,7 @@ public class UserService {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword()); // plaintext - deferred until JWT work
+        user.setPassword(passwordEncoder.encode(dto.getPassword())); // plaintext - deferred until JWT work
 
         Users saved = userRepository.save(user);
         return getDTO(saved);
