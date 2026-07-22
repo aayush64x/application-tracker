@@ -1,9 +1,12 @@
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
+import { useAuth } from "./AuthContext";
+import AuthenticatedNavbar from "./AuthenticatedNavbar";
 export default function LandingPage() {
+  const { token } = useAuth()
   return (
     <>
-      <Navbar />
+      {!token ? <Navbar /> : <AuthenticatedNavbar />} 
       <main className="bg-white text-gray-900">
         {/* Hero */}
         {/* Hero */}

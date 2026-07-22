@@ -1,172 +1,199 @@
+import AuthenticatedNavbar from "./AuthenticatedNavbar";
+
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950">
-      {/* Header */}
-      <header className="border-b border-slate-700/50 bg-slate-900/40 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
-          <div>
-            <h1 className="text-3xl font-bold text-white">
-              Dashboard
-            </h1>
+    <>
+      <AuthenticatedNavbar />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-slate-100">
+        {/* Header */}
+        <header className="border-b border-gray-200 bg-white/80 backdrop-blur">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
 
-            <p className="mt-1 text-slate-400">
-              Track your applications and interviews
-            </p>
-          </div>
-
-          <button className="rounded-xl bg-white px-5 py-3 font-semibold text-slate-900 transition hover:bg-slate-200">
-            + New Application
-          </button>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-7xl space-y-8 px-8 py-8">
-        {/* Stats */}
-        <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {["Applications", "Interviews", "Offers", "Rejected"].map((item) => (
-            <div
-              key={item}
-              className="rounded-2xl border border-slate-700 bg-slate-800/60 p-6 shadow-lg"
-            >
-              <p className="text-sm text-slate-400">{item}</p>
-
-              <h2 className="mt-3 text-4xl font-bold text-white">0</h2>
-
-              <p className="mt-2 text-sm text-slate-500">
-                Additional info
+              <p className="mt-1 text-gray-500">
+                Track your applications and stay organized.
               </p>
             </div>
-          ))}
-        </section>
 
-        {/* Middle Grid */}
-        <section className="grid gap-6 xl:grid-cols-3">
-          {/* Pipeline */}
-          <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-6 xl:col-span-2">
-            <h2 className="mb-6 text-xl font-semibold text-white">
-              Application Pipeline
-            </h2>
-
-            <div className="space-y-5">
-              {[
-                "Applied",
-                "Interview",
-                "Technical",
-                "Final",
-                "Offer",
-              ].map((status) => (
-                <div key={status}>
-                  <div className="mb-2 flex justify-between text-sm">
-                    <span className="text-slate-300">{status}</span>
-                    <span className="text-slate-500">0</span>
-                  </div>
-
-                  <div className="h-3 rounded-full bg-slate-700">
-                    <div className="h-3 w-1/3 rounded-full bg-white"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <button className="rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700">
+              + New Application
+            </button>
           </div>
+        </header>
 
-          {/* Today's Tasks */}
-          <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-6">
-            <h2 className="mb-5 text-xl font-semibold text-white">
-              Today's Tasks
-            </h2>
+        <main className="mx-auto max-w-7xl space-y-8 px-6 py-8">
+          {/* Stats */}
+          <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              {
+                title: "Applications",
+                value: "0",
+                description: "Total jobs applied",
+              },
+              {
+                title: "Interviews",
+                value: "0",
+                description: "Upcoming interviews",
+              },
+              {
+                title: "Offers",
+                value: "0",
+                description: "Received offers",
+              },
+              {
+                title: "Rejected",
+                value: "0",
+                description: "Applications closed",
+              },
+            ].map((stat) => (
+              <div
+                key={stat.title}
+                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md"
+              >
+                <p className="text-sm text-gray-500">{stat.title}</p>
 
-            <div className="space-y-4">
-              {[1, 2, 3, 4].map((task) => (
-                <div
-                  key={task}
-                  className="rounded-xl border border-slate-700 bg-slate-900/60 p-4"
-                >
-                  <p className="font-medium text-white">
-                    Task {task}
-                  </p>
+                <h2 className="mt-3 text-4xl font-bold text-gray-900">
+                  {stat.value}
+                </h2>
 
-                  <p className="mt-1 text-sm text-slate-400">
-                    Description...
-                  </p>
-                </div>
-              ))}
+                <p className="mt-2 text-sm text-gray-500">{stat.description}</p>
+              </div>
+            ))}
+          </section>
+
+          {/* Main Content */}
+          <section className="grid gap-8 xl:grid-cols-3">
+            {/* Pipeline */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm xl:col-span-2">
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Application Pipeline
+                </h2>
+
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-600">
+                  Overview
+                </span>
+              </div>
+
+              <div className="space-y-6">
+                {[
+                  ["Applied", 0],
+                  ["Interview", 0],
+                  ["Technical", 0],
+                  ["Final Round", 0],
+                  ["Offer", 0],
+                ].map(([status, value]) => (
+                  <div key={status}>
+                    <div className="mb-2 flex justify-between text-sm">
+                      <span className="font-medium text-gray-700">
+                        {status}
+                      </span>
+
+                      <span className="text-gray-500">{value}</span>
+                    </div>
+
+                    <div className="h-3 rounded-full bg-gray-100">
+                      <div className="h-3 w-1/4 rounded-full bg-blue-600"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
 
-        {/* Bottom Grid */}
-        <section className="grid gap-6 xl:grid-cols-2">
-          {/* Recent Applications */}
-          <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-white">
-                Recent Applications
+            {/* Tasks */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <h2 className="mb-6 text-xl font-semibold text-gray-900">
+                Today's Tasks
               </h2>
 
-              <button className="text-sm text-slate-400 hover:text-white">
-                View All
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {[1, 2, 3, 4].map((application) => (
-                <div
-                  key={application}
-                  className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-900/60 p-4"
-                >
-                  <div>
-                    <p className="font-medium text-white">
-                      Company Name
+              <div className="space-y-4">
+                {[1, 2, 3].map((task) => (
+                  <div
+                    key={task}
+                    className="rounded-xl border border-gray-100 bg-gray-50 p-4"
+                  >
+                    <p className="font-medium text-gray-900">
+                      Follow up application
                     </p>
 
-                    <p className="text-sm text-slate-400">
-                      Software Engineer
+                    <p className="mt-1 text-sm text-gray-500">
+                      Add notes and update status
                     </p>
                   </div>
-
-                  <span className="rounded-full bg-slate-700 px-3 py-1 text-xs text-white">
-                    Applied
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </section>
 
-          {/* Upcoming Interviews */}
-          <div className="rounded-2xl border border-slate-700 bg-slate-800/60 p-6">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-white">
-                Upcoming Interviews
-              </h2>
+          {/* Applications + Interviews */}
+          <section className="grid gap-8 xl:grid-cols-2">
+            {/* Recent Applications */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-6 flex justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Recent Applications
+                </h2>
 
-              <button className="text-sm text-slate-400 hover:text-white">
-                View Calendar
-              </button>
+                <button className="text-sm font-medium text-blue-600 hover:underline">
+                  View All
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {[1, 2, 3, 4].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center justify-between rounded-xl border border-gray-100 p-4"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900">Company Name</p>
+
+                      <p className="text-sm text-gray-500">Software Engineer</p>
+                    </div>
+
+                    <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
+                      Applied
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="space-y-4">
-              {[1, 2, 3].map((interview) => (
-                <div
-                  key={interview}
-                  className="rounded-xl border border-slate-700 bg-slate-900/60 p-4"
-                >
-                  <p className="font-medium text-white">
-                    Company
-                  </p>
+            {/* Upcoming Interviews */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-6 flex justify-between">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Upcoming Interviews
+                </h2>
 
-                  <p className="mt-1 text-sm text-slate-400">
-                    Date & Time
-                  </p>
+                <button className="text-sm font-medium text-blue-600 hover:underline">
+                  Calendar
+                </button>
+              </div>
 
-                  <p className="mt-2 text-xs text-slate-500">
-                    Interview Type
-                  </p>
-                </div>
-              ))}
+              <div className="space-y-4">
+                {[1, 2, 3].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-xl border border-gray-100 bg-gray-50 p-4"
+                  >
+                    <p className="font-medium text-gray-900">Company Name</p>
+
+                    <p className="mt-1 text-sm text-gray-500">
+                      Tomorrow • 2:00 PM
+                    </p>
+
+                    <span className="mt-3 inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">
+                      Technical Interview
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
-      </main>
-    </div>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }

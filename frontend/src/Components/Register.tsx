@@ -1,7 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { registerUser } from "../Api/auth";
+import { useState } from "react";
 
 export default function Register() {
+  const [userName, setUserName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [agree, setAgree] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const createUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    if (!agree) {
+      setError("You have to agree to the terms.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      await registerUser(userName, firstName, lastName, email, password);
+      navigate("/login");
+    } catch (err) {
+      setError("Registration failed. Please try again.");
+    }
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-100 px-6 py-12">
       <div className="w-full max-w-md rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
@@ -20,8 +56,15 @@ export default function Register() {
           </p>
         </div>
 
+        {/* Error banner */}
+        {error && (
+          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         {/* Form */}
-        <form className="mt-8 space-y-5">
+        <form className="mt-8 space-y-5" onSubmit={createUser}>
           {/* First Name + Last Name */}
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -34,6 +77,8 @@ export default function Register() {
 
               <input
                 id="firstName"
+                onChange={(e) => setFirstName(e.target.value)}
+                value={firstName}
                 type="text"
                 placeholder="John"
                 className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
@@ -49,6 +94,8 @@ export default function Register() {
               </label>
 
               <input
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 id="lastName"
                 type="text"
                 placeholder="Doe"
@@ -67,6 +114,8 @@ export default function Register() {
             </label>
 
             <input
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               id="username"
               type="text"
               placeholder="johndoe"
@@ -84,6 +133,8 @@ export default function Register() {
             </label>
 
             <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               id="email"
               type="email"
               placeholder="john@example.com"
@@ -102,17 +153,20 @@ export default function Register() {
 
             <div className="relative">
               <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="w-full rounded-xl border border-gray-300 py-3 pl-4 pr-12 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
               />
 
               <button
                 type="button"
+                onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-700"
               >
-                <Eye size={20} />
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
@@ -128,17 +182,20 @@ export default function Register() {
 
             <div className="relative">
               <input
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 id="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="••••••••"
                 className="w-full rounded-xl border border-gray-300 py-3 pl-4 pr-12 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
               />
 
               <button
                 type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-500 hover:text-gray-700"
               >
-                <Eye size={20} />
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
@@ -147,22 +204,18 @@ export default function Register() {
           <label className="flex items-start gap-3 text-sm text-gray-600">
             <input
               type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
               className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
 
             <span>
               I agree to the{" "}
-              <a
-                href="#"
-                className="font-medium text-blue-600 hover:underline"
-              >
+              <a href="#" className="font-medium text-blue-600 hover:underline">
                 Terms of Service
               </a>{" "}
               and{" "}
-              <a
-                href="#"
-                className="font-medium text-blue-600 hover:underline"
-              >
+              <a href="#" className="font-medium text-blue-600 hover:underline">
                 Privacy Policy
               </a>
               .
@@ -177,24 +230,6 @@ export default function Register() {
             Create Account
           </button>
         </form>
-
-        {/* Google Sign In (Disabled for now)
-        
-        <div className="my-8 flex items-center">
-          <div className="h-px flex-1 bg-gray-200"></div>
-          <span className="mx-4 text-sm text-gray-500">
-            OR
-          </span>
-          <div className="h-px flex-1 bg-gray-200"></div>
-        </div>
-
-        <button
-          className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-300 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
-        >
-          Continue with Google
-        </button>
-
-        */}
 
         {/* Login */}
         <p className="mt-8 text-center text-sm text-gray-600">

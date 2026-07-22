@@ -24,4 +24,7 @@ public class Users {
     @Column(nullable = false, unique = true)
     private String email;
     private String password;
+    @Column(nullable = true)
+    private String verificationToken = null;
+    private boolean verified = false;
 }
